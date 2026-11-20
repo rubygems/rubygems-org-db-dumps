@@ -1,0 +1,2 @@
+id,version_id,body,media_type,created_at,updated_at
+2500,10,"{""note"": ""comma, \""quote\"""", ""mediaType"": ""application/vnd.dev.sigstore.bundle.v0.3+json""}",application/vnd.dev.sigstore.bundle.v0.3+json,2024-11-14 21:15:00.123456,2024-11-14 21:15:00.5

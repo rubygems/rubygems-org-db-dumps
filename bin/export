@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# Export the rubygems.org tables from a restored database into CSV parts.
+#
+# Usage: bin/export [OUTPUT_DIR]
+#
+# Reads from the database named by $PGDATABASE (default: rubygems_org_db_dumps)
+# using the usual libpq environment variables, and writes OUTPUT_DIR/<table>/part_N.csv
+# (default: tables). See FORMAT.md for the format.
+set -euo pipefail
+
+out=${1:-tables}
+export PGDATABASE=${PGDATABASE:-rubygems_org_db_dumps}
+# Pin every setting that changes how values are printed, so the output does not
+# depend on the server's or the client's defaults.
+export PGOPTIONS="-c DateStyle=ISO,MDY -c TimeZone=UTC -c IntervalStyle=postgres -c extra_float_digits=1 -c bytea_output=hex"
+export PGCLIENTENCODING=UTF8
+
+# table:rows-per-part. Part N of a table holds the rows with N * size <= id < (N + 1) * size.
+tables=(
+  attestations:2500
+  deletions:100000
+  dependencies:250000
+  gem_downloads:1000000
+  linksets:100000
+  rubygems:100000
+  versions:50000
+)
+
+mkdir -p "$out"
+for entry in "${tables[@]}"; do
+  table=${entry%%:*}
+  size=${entry##*:}
+  staging="$out/.$table.tmp"
+  rm -rf "$staging"
+  mkdir -p "$staging"
+
+  parts=$(psql -X -A -t -v ON_ERROR_STOP=1 -c "SELECT DISTINCT id / $size FROM public.$table ORDER BY 1")
+  for part in $parts; do
+    echo "Exporting $table part $part"
+    psql -X -q -v ON_ERROR_STOP=1 -c "\\copy (SELECT * FROM public.$table WHERE id >= $((part * size)) AND id < $(((part + 1) * size)) ORDER BY id) TO '$staging/part_$part.csv' WITH (FORMAT csv, HEADER)"
+  done
+
+  # Replace the table's folder in one step, so parts from an earlier export never linger.
+  rm -rf "$out/$table"
+  mv "$staging" "$out/$table"
+done

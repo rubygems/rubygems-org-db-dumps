@@ -1,0 +1,7 @@
+id,authors,description,number,rubygem_id,built_at,updated_at,summary,platform,created_at,indexed,prerelease,position,latest,full_name,licenses,size,requirements,required_ruby_version,sha256,metadata,required_rubygems_version,yanked_at,pusher_id,canonical_number,cert_chain,pusher_api_key_id,gem_platform,gem_full_name,spec_sha256,info_checksum_v2,yanked_info_checksum_v2,ruby_abi,content_address
+50000,"A, B and ""C""","Line one
+Line two
+Line three",2.0.0.pre,2,,2026-10-19 21:00:00,Tab	here,java,2026-10-19 21:00:00,f,t,1,f,json-2.0.0.pre-java,"[""MIT"", ""Ruby""]",2147483647,git,>= 2.7,,"""quote\""key""=>NULL, ""source_code_uri""=>""https://example.org/a,b""",,,,,"-----BEGIN CERTIFICATE-----
+AAA
+-----END CERTIFICATE-----
+",,,,,,,,

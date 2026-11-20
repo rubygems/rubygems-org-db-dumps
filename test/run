@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Load test/fixture.sql into a scratch database, export it, and compare the
+# result byte for byte with test/expected/. Then check both against FORMAT.md.
+#
+# Usage: test/run [--update]   (--update rewrites test/expected/ from the export)
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+export PGDATABASE=rubygems_org_db_dumps_test
+out=$(mktemp -d)
+trap 'rm -rf "$out"' EXIT
+
+dropdb --if-exists "$PGDATABASE"
+createdb "$PGDATABASE"
+psql -X -q -v ON_ERROR_STOP=1 -f test/fixture.sql
+bin/export "$out" > /dev/null
+
+if [[ ${1:-} == --update ]]; then
+  rm -rf test/expected
+  cp -r "$out" test/expected
+fi
+
+diff -r test/expected "$out"
+bin/check-format test/expected
+dropdb "$PGDATABASE"
+echo "test/run: export matches test/expected"

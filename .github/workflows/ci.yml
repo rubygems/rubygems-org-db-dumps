@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    env:
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ikalnytskyi/action-setup-postgres@v7
+        with:
+          postgres-version: "17"
+      - name: Export the fixture and compare it with test/expected
+        run: test/run
+      - name: Check tables/ against FORMAT.md
+        run: |
+          if [ -d tables ]; then
+            bin/check-format tables
+          else
+            echo "No tables/ yet"
+          fi

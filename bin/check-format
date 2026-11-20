@@ -1,0 +1,173 @@
+#!/usr/bin/env python3
+"""Check that a tables/ folder matches the format in FORMAT.md.
+
+Usage: bin/check-format [TABLES_DIR]
+
+Reads the tables, their columns, column types, and rows per part from FORMAT.md,
+then checks every file under TABLES_DIR (default: tables) against them. Prints
+each problem it finds and exits with status 1 if there is any.
+"""
+import multiprocessing
+import os
+import re
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+VALUE = {
+    "integer": re.compile(r"-?(0|[1-9][0-9]*)"),
+    "boolean": re.compile(r"[tf]"),
+    "timestamp": re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]*[1-9])?"),
+    "text": None,
+}
+# One field and the separator after it. Group 1 is a quoted field's content,
+# group 2 an unquoted field, group 3 the separator.
+FIELD = re.compile(r'(?:"((?:[^"]|"")*)"|([^,"\r\n]*))([,\n])')
+NEEDS_QUOTES = re.compile(r'[,"\r\n]')
+PART = re.compile(r"part_(0|[1-9][0-9]*)\.csv")
+MAX_PROBLEMS = 20
+
+
+def read_spec():
+    """Return {table: (rows_per_part, [(column, type), ...])} from FORMAT.md."""
+    spec = {}
+    table = None
+    with open(os.path.join(ROOT, "FORMAT.md"), encoding="utf-8") as f:
+        for line in f:
+            if m := re.fullmatch(r"### (\w+)\n", line):
+                table = m[1]
+                spec[table] = [None, []]
+            elif table and (m := re.fullmatch(r"Rows per part: ([0-9]+)\n", line)):
+                spec[table][0] = int(m[1])
+            elif table and (m := re.fullmatch(r"\| (\w+) \| (\w+) \|\n", line)) and m[1] != "Column":
+                if m[2] not in VALUE:
+                    sys.exit(f"FORMAT.md: unknown type {m[2]!r} for {table}.{m[1]}")
+                spec[table][1].append((m[1], m[2]))
+    for name, (size, columns) in spec.items():
+        if not size or not columns:
+            sys.exit(f"FORMAT.md: table {name} needs a 'Rows per part' line and a column table")
+    return {name: tuple(value) for name, value in spec.items()}
+
+
+def parse_rows(text):
+    """Yield (offset, [(value, quoted), ...]) for each row of CSV text."""
+    pos = 0
+    end = len(text)
+    while pos < end:
+        newline = text.find("\n", pos)
+        if newline == -1:
+            raise ValueError(f"offset {pos}: last row does not end with a line feed")
+        line = text[pos:newline]
+        if '"' not in line and "\r" not in line:
+            yield pos, [(value, False) for value in line.split(",")]
+            pos = newline + 1
+            continue
+        start = pos
+        fields = []
+        while True:
+            m = FIELD.match(text, pos)
+            if not m:
+                raise ValueError(f"offset {pos}: malformed field")
+            if m[1] is not None:
+                fields.append((m[1].replace('""', '"'), True))
+            else:
+                fields.append((m[2], False))
+            pos = m.end()
+            if m[3] == "\n":
+                break
+        yield start, fields
+
+
+def check_file(args):
+    path, name, part, size, columns = args
+    problems = []
+
+    def problem(message):
+        if len(problems) < MAX_PROBLEMS:
+            problems.append(f"{path}: {message}")
+
+    with open(path, "rb") as f:
+        data = f.read()
+    if data.startswith(b"\xef\xbb\xbf"):
+        problem("starts with a byte order mark")
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError as e:
+        return [f"{path}: not UTF-8 ({e})"]
+
+    header = ",".join(column for column, _ in columns)
+    if not text.startswith(header + "\n"):
+        return [f"{path}: header is not {header!r}"]
+
+    checks = [VALUE[kind] for _, kind in columns]
+    low, high = part * size, (part + 1) * size
+    previous_id = None
+    rows = 0
+    try:
+        for offset, fields in parse_rows(text[len(header) + 1:]):
+            rows += 1
+            where = f"row {rows}"
+            if len(fields) != len(columns):
+                problem(f"{where}: {len(fields)} fields, expected {len(columns)}")
+                continue
+            for (value, quoted), check, (column, kind) in zip(fields, checks, columns):
+                if not quoted and value == "":
+                    continue  # NULL
+                if quoted != (value == "" or bool(NEEDS_QUOTES.search(value))):
+                    problem(f"{where}: {column} {value[:40]!r} is {'' if quoted else 'not '}quoted")
+                if check and not check.fullmatch(value):
+                    problem(f"{where}: {column} {value[:40]!r} is not a valid {kind}")
+            raw_id, quoted = fields[0]
+            if quoted or not VALUE["integer"].fullmatch(raw_id):
+                problem(f"{where}: id {raw_id!r} is not an integer")
+                continue
+            row_id = int(raw_id)
+            if not low <= row_id < high:
+                problem(f"{where}: id {row_id} belongs in part_{row_id // size}.csv")
+            if previous_id is not None and row_id <= previous_id:
+                problem(f"{where}: id {row_id} is not after the previous id {previous_id}")
+            previous_id = row_id
+    except ValueError as e:
+        problem(str(e))
+    if rows == 0:
+        problem("has no rows")
+    return problems
+
+
+def main():
+    tables_dir = sys.argv[1] if len(sys.argv) > 1 else "tables"
+    spec = read_spec()
+    problems = []
+    jobs = []
+
+    present = set(os.listdir(tables_dir)) if os.path.isdir(tables_dir) else set()
+    for entry in sorted(present - set(spec)):
+        problems.append(f"{tables_dir}/{entry}: not a table in FORMAT.md")
+    for name, (size, columns) in spec.items():
+        folder = os.path.join(tables_dir, name)
+        if not os.path.isdir(folder):
+            problems.append(f"{folder}: missing")
+            continue
+        for entry in sorted(os.listdir(folder)):
+            m = PART.fullmatch(entry)
+            if not m:
+                problems.append(f"{folder}/{entry}: not named part_N.csv")
+                continue
+            jobs.append((os.path.join(folder, entry), name, int(m[1]), size, columns))
+
+    # Largest files first, so the slowest ones do not start last.
+    jobs.sort(key=lambda job: -os.path.getsize(job[0]))
+    with multiprocessing.Pool() as pool:
+        for result in pool.imap_unordered(check_file, jobs):
+            problems.extend(result)
+
+    for line in sorted(problems):
+        print(line)
+    if problems:
+        print(f"{len(problems)} problems found", file=sys.stderr)
+        sys.exit(1)
+    print(f"{tables_dir}: {len(jobs)} files match FORMAT.md")
+
+
+if __name__ == "__main__":
+    main()
