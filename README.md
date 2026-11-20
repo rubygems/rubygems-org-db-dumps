@@ -1,6 +1,6 @@
 # rubygems-org-db-dumps
 
-This repository turns the public RubyGems.org database into CSV files. Each week it restores the latest database dump into PostgreSQL, exports seven tables as CSV into [`tables/`](tables), and commits the result. A GitHub Actions workflow handles the weekly run.
+This repository turns the public RubyGems.org database into CSV files. Each week it restores the latest database dump into PostgreSQL, exports seven tables as CSV into [`tables/`](tables), commits the result, and publishes the raw dump as a GitHub Release. A GitHub Actions workflow handles the weekly run.
 
 ## Where does the data come from?
 
@@ -94,6 +94,8 @@ CI runs `test/run` on every push and pull request, and you can start it by hand 
 ## The weekly update
 
 [`.github/workflows/update.yml`](.github/workflows/update.yml) runs `bin/update` every Tuesday at 06:17 UTC, after RubyGems.org publishes its Monday dump. When `tables/` or `DUMP` change, it commits them. To run it by hand, open the **Update tables** workflow in the Actions tab and choose **Run workflow**. Tick the option to export again to rerun it on a dump that's already exported.
+
+Then `bin/release` publishes the raw dump as a [GitHub Release](https://github.com/rubygems/rubygems-org-db-dumps/releases). The release and its tag are named after the dump's timestamp, such as `2026.11.16.21.21.01`, the tag points at the commit with that dump's `tables/`, and the dump is attached unchanged as `public_postgresql.tar`. The newest one is always at https://github.com/rubygems/rubygems-org-db-dumps/releases/latest/download/public_postgresql.tar. Running the workflow again on the same dump doesn't make another release; it only finishes one that an earlier run left incomplete.
 
 ## License
 

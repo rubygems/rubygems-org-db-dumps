@@ -57,3 +57,9 @@ jobs:
           # main may have moved during the export; only this job writes tables/ and DUMP.
           git pull --rebase origin main
           git push
+      # Runs after every successful update, so a rerun finishes a release that an
+      # earlier run didn't.
+      - name: Release the dump
+        run: bin/release
+        env:
+          GH_TOKEN: ${{ github.token }}

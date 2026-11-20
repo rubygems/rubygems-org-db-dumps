@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Publish the raw dump that DUMP names as a GitHub Release of this repository.
+#
+# Usage: bin/release [COMMIT]
+#
+# The release and its tag are named after the dump's timestamp, such as
+# 2026.11.16.21.21.01, and the tag points at COMMIT (default HEAD), which should
+# be the pushed commit whose tables/ came from that dump. The dump is downloaded
+# again and attached unchanged as public_postgresql.tar. When the release already
+# has it, nothing is done. A draft or a release without the file, left by an
+# interrupted run, gets the file and is published. Needs gh, logged in with
+# permission to write contents (in Actions, GH_TOKEN).
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+bucket=https://s3-us-west-2.amazonaws.com/rubygems-dumps
+key=$(cat DUMP)
+tag=$(cut -d/ -f3 <<< "$key")
+target=$(git rev-parse "${1:-HEAD}")
+
+# gh prints "release not found" when no release, published or draft, has the tag.
+if info=$(gh release view "$tag" --json isDraft,assets \
+  --jq '"\(.isDraft) \([.assets[] | select(.name == "public_postgresql.tar" and .state == "uploaded")] | length)"' 2>&1); then
+  exists=1
+  if [[ $info == "false 1" ]]; then
+    echo "Release $tag already has public_postgresql.tar"
+    exit 0
+  fi
+elif [[ $info == *"release not found"* ]]; then
+  exists=
+else
+  echo "$info" >&2
+  exit 1
+fi
+
+work=$(mktemp -d)
+trap 'rm -rf "$work"' EXIT
+echo "Downloading $key"
+curl --fail --silent --show-error --retry 3 -o "$work/public_postgresql.tar" "$bucket/$key"
+
+if [[ -z $exists ]]; then
+  echo "Creating release $tag at $target"
+  gh release create "$tag" "$work/public_postgresql.tar" --target "$target" --title "$tag" --notes "The RubyGems.org PostgreSQL dump \`$key\`, unchanged from [rubygems.org/pages/data](https://rubygems.org/pages/data). \`tables/\` at this tag is exported from it."
+else
+  echo "Finishing release $tag"
+  gh release upload "$tag" "$work/public_postgresql.tar" --clobber
+  gh release edit "$tag" --draft=false
+fi
