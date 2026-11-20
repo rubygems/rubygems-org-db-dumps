@@ -26,6 +26,8 @@ FIELD = re.compile(r'(?:"((?:[^"]|"")*)"|([^,"\r\n]*))([,\n])')
 NEEDS_QUOTES = re.compile(r'[,"\r\n]')
 PART = re.compile(r"part_(0|[1-9][0-9]*)\.csv")
 MAX_PROBLEMS = 20
+# GitHub warns on pushes of files over 50 MiB and rejects them over 100 MiB.
+WARN_SIZE = 45 * 1024 * 1024
 
 
 def read_spec():
@@ -160,6 +162,12 @@ def main():
     with multiprocessing.Pool() as pool:
         for result in pool.imap_unordered(check_file, jobs):
             problems.extend(result)
+
+    # A warning, not a problem: the file is valid, but its table needs smaller parts soon.
+    prefix = "::warning::" if os.environ.get("GITHUB_ACTIONS") else "warning: "
+    for path, *_ in sorted(jobs):
+        if (size := os.path.getsize(path)) >= WARN_SIZE:
+            print(f"{prefix}{path} is {size / 2**20:.1f} MiB, near GitHub's 50 MiB warning (100 MiB limit)")
 
     for line in sorted(problems):
         print(line)

@@ -92,7 +92,9 @@ Exporting the same dump always writes the same bytes.
 The steps are also available on their own:
 
 - `bin/export [DIR]` exports the restored database into `DIR` (default `tables`).
-- `bin/check-format [DIR]` checks `DIR` (default `tables`) against FORMAT.md.
+- `bin/check-format [DIR]` checks `DIR` (default `tables`) against FORMAT.md,
+  and warns about any file over 45 MiB: GitHub warns about files over 50 MiB
+  and rejects files over 100 MiB, so that table needs smaller parts.
 
 ## Tests
 

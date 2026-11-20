@@ -31,3 +31,4 @@ Preconditions:
 - It only parses sections shaped exactly like `### table`, `Rows per part: N`, and `| column | type |` rows. Reformatting those (extra spaces, a new type name) silently drops or breaks rules; FORMAT.md says to keep that form.
 - It validates shape, not values: a wrong-but-well-formed timestamp, a different jsonb key order, or different hstore spacing passes. Only `fixture-export` and `upstream-parity` catch those.
 - It stops listing problems after 20 per file.
+- A file of 45 MiB or more prints `warning: <path> is N MiB, near GitHub's 50 MiB warning` (`::warning::` under GitHub Actions) but does not fail the check. To see it, write a valid part over 45 MiB into a copy of `test/expected/` (for example 100000 `rubygems` rows with 450-character names) and run `bin/check-format` on the copy: it must print the warning and exit 0.
