@@ -19,6 +19,21 @@ jobs:
     timeout-minutes: 120
     permissions:
       contents: write
+    services:
+      # The runner's psql client talks to this server over port 5432.
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        # Check over TCP: the image's first-start server listens only on a
+        # socket, so this passes once the real server is up.
+        options: >-
+          --health-cmd "pg_isready -h localhost -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
     env:
       # A throwaway server that only this job can reach.
       PGHOST: localhost
@@ -26,9 +41,6 @@ jobs:
       PGPASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
-      - uses: ikalnytskyi/action-setup-postgres@v7
-        with:
-          postgres-version: "17"
       - run: bin/update ${{ inputs.force && '--force' || '' }}
       - name: Commit tables/
         run: |

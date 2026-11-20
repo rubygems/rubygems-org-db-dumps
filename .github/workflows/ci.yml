@@ -7,15 +7,27 @@ on:
 jobs:
   format:
     runs-on: ubuntu-latest
+    services:
+      # The runner's psql client talks to this server over port 5432.
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        # Check over TCP: the image's first-start server listens only on a
+        # socket, so this passes once the real server is up.
+        options: >-
+          --health-cmd "pg_isready -h localhost -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
     env:
       PGHOST: localhost
       PGUSER: postgres
       PGPASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
-      - uses: ikalnytskyi/action-setup-postgres@v7
-        with:
-          postgres-version: "17"
       - name: Export the fixture and compare it with test/expected
         run: test/run
       - name: Check tables/ against FORMAT.md
