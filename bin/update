@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+# Find the latest rubygems.org PostgreSQL dump, download it, restore it into a
+# fresh database, and export it into tables/. Records the dump it used in DUMP.
+#
+# Usage: bin/update [--force] [DUMP_KEY]
+#
+# DUMP_KEY is a key such as production/public_postgresql/2026.10.19.21.21.38/public_postgresql.tar
+# and defaults to the newest one. When DUMP already names that dump, nothing is
+# done unless --force is given. Running it again on the same dump writes the same
+# files. Connects with the usual libpq environment variables (PGHOST, PGUSER, ...);
+# the database named by PGDATABASE (default: rubygems_org_db_dumps) is dropped
+# and recreated.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+bucket=https://s3-us-west-2.amazonaws.com/rubygems-dumps
+export PGDATABASE=${PGDATABASE:-rubygems_org_db_dumps}
+
+force=
+if [[ ${1:-} == --force ]]; then
+  force=1
+  shift
+fi
+
+key=${1:-}
+if [[ -z $key ]]; then
+  listing=$(curl --fail --silent --show-error --retry 3 "$bucket/?prefix=production/public_postgresql/")
+  if [[ $listing == *"<IsTruncated>true</IsTruncated>"* ]]; then
+    echo "The dump listing is longer than one page; bin/update needs to page through it." >&2
+    exit 1
+  fi
+  key=$(grep -o '<Key>[^<]*/public_postgresql\.tar</Key>' <<< "$listing" | sed 's/<[^>]*>//g' | sort | tail -n 1)
+  if [[ -z $key ]]; then
+    echo "No dumps found at $bucket" >&2
+    exit 1
+  fi
+fi
+
+if [[ -z $force && -f DUMP && $(cat DUMP) == "$key" && -d tables ]]; then
+  echo "tables/ is already exported from $key"
+  exit 0
+fi
+
+work=$(mktemp -d)
+trap 'rm -rf "$work"' EXIT
+
+echo "Downloading $key"
+curl --fail --silent --show-error --retry 3 -o "$work/dump.tar" "$bucket/$key"
+
+echo "Restoring into $PGDATABASE"
+dropdb --if-exists "$PGDATABASE"
+createdb "$PGDATABASE"
+psql -X -q -v ON_ERROR_STOP=1 -c "CREATE EXTENSION hstore"
+# The dump is plain SQL. Some statements always fail and can be ignored: it sets
+# owners to a role that does not exist here, and adds foreign keys to tables
+# that the public dump leaves out. Any other error stops the update.
+# \restrict and \unrestrict are left out so that psql older than 17.6 can read it.
+tar -xOf "$work/dump.tar" public_postgresql/databases/PostgreSQL.sql.gz \
+  | gunzip \
+  | grep -v '^\\\(un\)\?restrict ' \
+  | psql -X -q -o /dev/null 2> "$work/restore.log"
+unexpected=$(grep '^ERROR:' "$work/restore.log" \
+  | grep -v -E '^ERROR:  (role "[^"]+" does not exist|relation "public\.[a-z_]+" does not exist)$' || true)
+if [[ -n $unexpected ]]; then
+  echo "Restoring the dump failed:" >&2
+  echo "$unexpected" >&2
+  exit 1
+fi
+
+echo "Exporting tables/"
+bin/export tables
+bin/check-format tables
+echo "$key" > DUMP
+echo "tables/ is now exported from $key"

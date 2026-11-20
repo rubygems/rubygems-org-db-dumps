@@ -1,0 +1,43 @@
+name: Update tables
+
+on:
+  # rubygems.org publishes a dump every Monday around 21:20 UTC.
+  schedule:
+    - cron: "17 6 * * 2"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Export again even if tables/ already comes from the latest dump
+        type: boolean
+        default: false
+
+concurrency: update-tables
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    env:
+      # A throwaway server that only this job can reach.
+      PGHOST: localhost
+      PGUSER: postgres
+      PGPASSWORD: postgres
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ikalnytskyi/action-setup-postgres@v7
+        with:
+          postgres-version: "17"
+      - run: bin/update ${{ inputs.force && '--force' || '' }}
+      - name: Commit tables/
+        run: |
+          git add tables DUMP
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update tables for $(cut -d/ -f3 DUMP)"
+          git push
