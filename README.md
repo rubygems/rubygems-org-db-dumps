@@ -1,20 +1,14 @@
 # rubygems-org-db-dumps
 
-The public rubygems.org database, as CSV files.
+This repository turns the public RubyGems.org database into CSV files. Each week it restores the latest database dump into PostgreSQL, exports seven tables as CSV into [`tables/`](tables), and commits the result. A GitHub Actions workflow handles the weekly run.
 
-Every week rubygems.org publishes a sanitized PostgreSQL dump of its database
-(see [rubygems.org/pages/data](https://rubygems.org/pages/data)). This
-repository restores the newest dump into PostgreSQL, exports its tables as CSV
-into [`tables/`](tables), and commits the result. A GitHub Actions workflow does
-this once a week.
+## Where does the data come from?
 
-[ClickGems](https://clickgems.clickhouse.com), the RubyGems analytics site run
-by ClickHouse, loads `tables/` from this repository.
+RubyGems.org publishes a sanitized PostgreSQL dump of its database every week, with all user information removed. See [rubygems.org/pages/data](https://rubygems.org/pages/data). This repository uses the newest dump and records its name in [`DUMP`](DUMP).
 
-## What is in `tables/`
+## What is in `tables/`?
 
-One folder per table of the public dump, each split into files of a fixed range
-of ids:
+There is one folder for each table, and each folder is split into parts that cover a fixed range of ids:
 
 | Folder | Rows per part |
 | --- | --- |
@@ -26,75 +20,64 @@ of ids:
 | `rubygems` | 100,000 |
 | `versions` | 50,000 |
 
-`tables/versions/part_3.csv` holds the versions with ids from 150000 to 199999.
-Every file starts with a header row. NULL is an empty field and an empty string
-is `""`. Timestamps are UTC, written like `2015-04-20 21:24:46.2566`, and
-booleans are `t` or `f`.
+For example, `tables/versions/part_3.csv` holds the versions with ids from 150000 to 199999. A part that would be empty isn't written, so there can be gaps in the numbering.
 
-[FORMAT.md](FORMAT.md) is the full specification, with every column and its
-type. The format is the one that
-[segiddins/rubygems-org-db-dumps](https://github.com/segiddins/rubygems-org-db-dumps)
-used, so programs that read that repository can read this one.
+* Every file starts with a header row.
+* NULL is an empty field, and an empty string is `""`.
+* Timestamps are UTC and look like `2015-04-20 21:24:46.2566`.
+* Booleans are `t` or `f`.
+* Exporting the same dump twice gives the same bytes.
 
-[`DUMP`](DUMP) names the dump that `tables/` was exported from.
+[FORMAT.md](FORMAT.md) is the full specification and lists every column with its type.
 
-## How ClickGems uses it
+## How does ClickGems use it?
 
-ClickGems reads each table straight from GitHub with ClickHouse's `url` table
-function, in a materialized view that refreshes once a week, for example:
+[ClickGems](https://clickgems.clickhouse.com), the RubyGems analytics site run by ClickHouse, reads tables in this format. A refreshable materialized view loads each table straight from GitHub once a week with ClickHouse's `url` table function, for example:
 
 ```sql
 SELECT *
-FROM url('https://raw.githubusercontent.com/<owner>/rubygems-org-db-dumps/refs/heads/main/tables/rubygems/part_{0..100}.csv', 'CSVWithNames')
+FROM url('https://raw.githubusercontent.com/rubygems/rubygems-org-db-dumps/refs/heads/main/tables/rubygems/part_{0..100}.csv', 'CSVWithNames')
 ```
 
-The rows go into `ReplacingMergeTree` tables, which drop the rows that repeat
-from one week to the next. The ClickHouse blog post
-[Announcing Ruby Gem analytics](https://clickhouse.com/blog/announcing-ruby-gem-analytics-powered-by-clickhouse)
-describes the setup. You can load the tables into your own ClickHouse the same
-way.
+The view appends rows to `ReplacingMergeTree` tables, which remove the rows that repeat from week to week. [Announcing Ruby Gem analytics](https://clickhouse.com/blog/announcing-ruby-gem-analytics-powered-by-clickhouse) describes the setup. You can load the tables into your own ClickHouse the same way.
 
-Because readers depend on the file names, the columns, and the CSV details, a
-change to any of them is a breaking change: update FORMAT.md, `test/expected/`,
-and the readers together.
+Readers depend on the file names, the columns, and the CSV details. Changing any of them is a breaking change, so update FORMAT.md, `test/expected/`, and the readers together.
 
 ## Running it locally
 
-You need PostgreSQL 17 (server and client tools), with the `hstore` extension
-(in Debian and Ubuntu it is part of the `postgresql` package), plus `bash`,
-`curl`, and Python 3. Point the usual libpq environment variables (`PGHOST`,
-`PGUSER`, `PGPASSWORD`, ...) at a server where your user can create databases.
+You need:
 
-With [mise](https://mise.jdx.dev) and Docker, `mise install` installs the tools
-in `mise.toml` and `docker compose up --detach --wait` starts the server in
-`compose.yml`; inside the checkout, mise points libpq at that server.
+* PostgreSQL 18, both the server and the client tools, with the `hstore` extension. On Debian and Ubuntu, `hstore` comes with the `postgresql-18` package.
+* `bash`, `curl`, and Python 3.
+* A server where your user can create databases. Point the usual libpq environment variables (`PGHOST`, `PGUSER`, `PGPASSWORD`, and so on) at it.
+
+If you have [mise](https://mise.jdx.dev) and Docker, they can set up PostgreSQL and Python for you:
+
+```sh
+mise install
+docker compose up --detach --wait
+```
+
+`mise install` installs the PostgreSQL 18 client tools and Python 3 listed in `mise.toml`. `docker compose up` starts the PostgreSQL 18 server from `compose.yml`, which only listens on localhost. Inside the checkout, mise points libpq at that server by setting `PGHOST`, `PGUSER` and `PGPASSWORD`, but keeps any of them you've already set. Run `docker compose down` to stop it.
+
+Then run:
 
 ```sh
 bin/update
 ```
 
-This finds the newest dump, downloads it (about 700 MB), restores it into the
-database `rubygems_org_db_dumps` (set `PGDATABASE` to use another name; it is
-dropped and created again), writes `tables/`, checks it against FORMAT.md, and
-writes the dump's name to `DUMP`. It takes a few minutes and needs about 10 GB
-of free disk space.
+`bin/update` finds the newest dump and downloads it (about 700 MB). It restores the dump into the `rubygems_org_db_dumps` database, then writes `tables/`, checks it against FORMAT.md, and writes the dump's name to `DUMP`. It drops and recreates that database each time, so set `PGDATABASE` if you want a different name. A run takes a few minutes and needs about 10 GB of free disk space.
 
-Running it again does nothing when `DUMP` already names the newest dump. Use
-`bin/update --force` to export again anyway, or pass a dump's key to export an
-older one:
+If `DUMP` already names the newest dump, `bin/update` does nothing. To export again anyway, use `--force`. To export an older dump, pass its key:
 
 ```sh
 bin/update --force production/public_postgresql/2026.10.19.21.21.38/public_postgresql.tar
 ```
 
-Exporting the same dump always writes the same bytes.
+You can also run each step on its own:
 
-The steps are also available on their own:
-
-- `bin/export [DIR]` exports the restored database into `DIR` (default `tables`).
-- `bin/check-format [DIR]` checks `DIR` (default `tables`) against FORMAT.md,
-  and warns about any file over 45 MiB: GitHub warns about files over 50 MiB
-  and rejects files over 100 MiB, so that table needs smaller parts.
+* `bin/export [DIR]` exports the restored database into `DIR` (default `tables`).
+* `bin/check-format [DIR]` checks `DIR` (default `tables`) against FORMAT.md. It also warns about any file of 45 MiB or more, without failing. GitHub warns about files over 50 MiB and rejects files over 100 MiB, so a table that gets this warning needs smaller parts.
 
 ## Tests
 
@@ -102,24 +85,16 @@ The steps are also available on their own:
 test/run
 ```
 
-loads [test/fixture.sql](test/fixture.sql), a small database with the awkward
-cases (quotes, commas, line breaks, NULL next to empty strings, ids on both
-sides of a part boundary), exports it, and compares the result byte for byte
-with [test/expected/](test/expected). It needs the same PostgreSQL setup as
-`bin/update`. CI runs it on every push and pull request, and also checks the
-committed `tables/` against FORMAT.md.
+`test/run` loads [test/fixture.sql](test/fixture.sql), a small database full of awkward cases: quotes, commas, line breaks, NULL next to empty strings, and ids on both sides of a part boundary. It exports the fixture and compares the result byte for byte with [test/expected/](test/expected). It needs the same PostgreSQL setup as `bin/update`, but doesn't download anything.
 
-If you change the format on purpose, run `test/run --update` and commit the new
-`test/expected/` together with the change to FORMAT.md.
+If you change the format on purpose, run `test/run --update` and commit the new `test/expected/` together with the change to FORMAT.md.
+
+CI runs `test/run` on every push and pull request, and you can start it by hand from the **CI** workflow in the Actions tab. It also checks the committed `tables/` against FORMAT.md.
 
 ## The weekly update
 
-[`.github/workflows/update.yml`](.github/workflows/update.yml) runs `bin/update`
-every Tuesday morning (UTC), after rubygems.org publishes its Monday dump, and
-commits `tables/` and `DUMP` when they changed. To run it by hand, open the
-**Update tables** workflow in the Actions tab and choose **Run workflow**.
+[`.github/workflows/update.yml`](.github/workflows/update.yml) runs `bin/update` every Tuesday at 06:17 UTC, after RubyGems.org publishes its Monday dump. When `tables/` or `DUMP` change, it commits them. To run it by hand, open the **Update tables** workflow in the Actions tab and choose **Run workflow**. Tick the option to export again to rerun it on a dump that's already exported.
 
 ## License
 
-See [LICENSE](LICENSE). The data in `tables/` comes from rubygems.org's public
-dumps.
+The code is released under the [MIT License](LICENSE). The data in `tables/` comes from the public RubyGems.org dumps.
