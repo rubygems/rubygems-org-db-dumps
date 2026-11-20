@@ -1,6 +1,6 @@
 ---
 name: verify-rubygems-org-db-dumps
-description: Proves changes to rubygems-org-db-dumps work by driving its real CLI surface (bin/export, bin/check-format, bin/update, test/run) against a throwaway PostgreSQL 17 server, including byte-for-byte parity of tables/ with segiddins/rubygems-org-db-dumps. Use before claiming any change to the exporter, FORMAT.md, the format checker, the update script, the fixture, or the workflows is done.
+description: Proves changes to rubygems-org-db-dumps work by driving its real CLI surface (bin/export, bin/check-format, bin/update, test/run) against a throwaway PostgreSQL 19 server, including byte-for-byte parity of tables/ with segiddins/rubygems-org-db-dumps. Use before claiming any change to the exporter, FORMAT.md, the format checker, the update script, the fixture, or the workflows is done.
 ---
 
 # Verify rubygems-org-db-dumps
@@ -20,14 +20,14 @@ Helpers live in `scripts/` next to this file. All paths below are relative to th
 
 ## Launch
 
-Needs PostgreSQL 17 server and client with `hstore` (Debian/Ubuntu `postgresql-17`, macOS `brew install postgresql@17`), Python 3.8+, `curl`, `tar`, `gunzip`. The helper never uses a server you already run: it creates its own cluster under `$VERIFY_ROOT` (default `/tmp/verify-rubygems-org-db-dumps`), listening only on a Unix socket on port 54329, trust auth, user `postgres`.
+Needs PostgreSQL 19 server and client with `hstore` (Debian/Ubuntu `postgresql-19`, macOS `brew install postgresql@19`), Python 3.8+, `curl`, `tar`, `gunzip`. The helper never uses a server you already run: it creates its own cluster under `$VERIFY_ROOT` (default `/tmp/verify-rubygems-org-db-dumps`), listening only on a Unix socket on port 54329, trust auth, user `postgres`.
 
 ```sh
 S=.agents/skills/verify-rubygems-org-db-dumps/scripts
 eval "$($S/pg up)"     # creates or starts the server, prints PGHOST/PGPORT/PGUSER/PATH
 ```
 
-Ready means `pg up` returned 0: it waits for the server, runs a query, and confirms `hstore` is available. It also unsets `PGDATABASE`, `PGOPTIONS`, `PGPASSWORD` and service files so nothing from your shell leaks into the export. In a new shell, reattach with `eval "$($S/pg env)"`. Set `PGBIN` if PostgreSQL 17 is somewhere unusual.
+Ready means `pg up` returned 0: it waits for the server, runs a query, and confirms `hstore` is available. It also unsets `PGDATABASE`, `PGOPTIONS`, `PGPASSWORD` and service files so nothing from your shell leaks into the export. In a new shell, reattach with `eval "$($S/pg env)"`. Set `PGBIN` if PostgreSQL 19 is somewhere unusual.
 
 ## Doctor
 
@@ -35,7 +35,7 @@ Ready means `pg up` returned 0: it waits for the server, runs a query, and confi
 $S/doctor
 ```
 
-Read-only. Prints `ok`/`FAIL`/`info` per check and exits 1 on any `FAIL`: repo checkout, tools on `PATH`, `psql` is 17, Python ≥ 3.8, `PGHOST` points at the scratch server (not some other server), server is 17 with `hstore`, role can create databases, free disk (info only; `bin/update` needs ~10 GB), dump bucket reachable (info only; without it only the fixture and format journeys work). Run it first, and again whenever anything looks off.
+Read-only. Prints `ok`/`FAIL`/`info` per check and exits 1 on any `FAIL`: repo checkout, tools on `PATH`, `psql` is 19, Python ≥ 3.8, `PGHOST` points at the scratch server (not some other server), server is 19 with `hstore`, role can create databases, free disk (info only; `bin/update` needs ~10 GB), dump bucket reachable (info only; without it only the fixture and format journeys work). Run it first, and again whenever anything looks off.
 
 ## Drive
 
@@ -76,7 +76,7 @@ Stops only the server under `$VERIFY_ROOT/pg` (by its data directory, never by p
 
 | Helper | Invocation | Notes |
 | --- | --- | --- |
-| `scripts/pg` | `eval "$($S/pg up)"`, `eval "$($S/pg env)"`, `$S/pg down` | Throwaway PostgreSQL 17 on a Unix socket. |
+| `scripts/pg` | `eval "$($S/pg up)"`, `eval "$($S/pg env)"`, `$S/pg down` | Throwaway PostgreSQL 19 on a Unix socket. |
 | `scripts/doctor` | `$S/doctor` | Read-only health check, exit 1 on failure. |
 | `scripts/format-controls` | `$S/format-controls` | Breaks a copy of `test/expected/` 17 ways and requires `bin/check-format` to reject each one, plus pass the untouched copy. No database needed. |
 | `scripts/upstream-diff` | `$S/upstream-diff TABLES_DIR DUMP_KEY` | Compares every file's git blob hash with the upstream commit "Update tables for <date>" via the GitHub API; downloads only differing files to show the first differing bytes. Set `GITHUB_TOKEN` if rate-limited. |
