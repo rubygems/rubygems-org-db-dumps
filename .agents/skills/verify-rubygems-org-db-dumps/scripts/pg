@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# A throwaway PostgreSQL 19 server for verification, reachable only through a
+# A throwaway PostgreSQL 18 server for verification, reachable only through a
 # Unix socket under $VERIFY_ROOT, so it never touches another server.
 #
 # Usage:
@@ -14,15 +14,15 @@ port=54329
 
 find_bin() {
   local candidate
-  for candidate in "${PGBIN:-}" /usr/lib/postgresql/19/bin /opt/homebrew/opt/postgresql@19/bin \
-    /usr/local/opt/postgresql@19/bin "$(dirname "$(command -v initdb 2>/dev/null || echo /nonexistent/x)")"; do
-    if [[ -n $candidate && -x $candidate/initdb && $("$candidate/initdb" --version) == *" 19."* ]]; then
+  for candidate in "${PGBIN:-}" /usr/lib/postgresql/18/bin /opt/homebrew/opt/postgresql@18/bin \
+    /usr/local/opt/postgresql@18/bin "$(dirname "$(command -v initdb 2>/dev/null || echo /nonexistent/x)")"; do
+    if [[ -n $candidate && -x $candidate/initdb && $("$candidate/initdb" --version) == *" 18."* ]]; then
       echo "$candidate"
       return
     fi
   done
-  echo "PostgreSQL 19 not found. Install it (Debian/Ubuntu: apt-get install postgresql-19;" \
-    "macOS: brew install postgresql@19) or set PGBIN to its bin directory." >&2
+  echo "PostgreSQL 18 not found. Install it (Debian/Ubuntu: apt-get install postgresql-18;" \
+    "macOS: brew install postgresql@18) or set PGBIN to its bin directory." >&2
   exit 1
 }
 

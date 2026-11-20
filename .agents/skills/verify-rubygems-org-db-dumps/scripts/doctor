@@ -18,7 +18,7 @@ for tool in psql createdb dropdb curl python3 tar gunzip; do
   command -v $tool > /dev/null && ok "$tool: $(command -v $tool)" || bad "$tool not on PATH"
 done
 client=$(psql --version 2>/dev/null)
-[[ $client == *" 19."* ]] && ok "client: $client" || bad "client is not PostgreSQL 19: ${client:-none}"
+[[ $client == *" 18."* ]] && ok "client: $client" || bad "client is not PostgreSQL 18: ${client:-none}"
 python3 -c 'import sys; sys.exit(sys.version_info < (3, 8))' 2>/dev/null \
   && ok "python3 >= 3.8 (bin/check-format uses :=)" || bad "python3 is older than 3.8"
 
@@ -28,7 +28,7 @@ else
   bad "PGHOST=${PGHOST:-unset} is not the scratch server; run: eval \"\$(scripts/pg up)\""
 fi
 server=$(psql -X -A -t -d postgres -c "SHOW server_version" 2>&1)
-[[ $server == 19.* ]] && ok "server answers: PostgreSQL $server" || bad "server: $server"
+[[ $server == 18.* ]] && ok "server answers: PostgreSQL $server" || bad "server: $server"
 hstore=$(psql -X -A -t -d postgres -c "SELECT 1 FROM pg_available_extensions WHERE name = 'hstore'" 2>&1)
 [[ $hstore == 1 ]] && ok "hstore extension available" || bad "hstore extension not available"
 createdb_ok=$(psql -X -A -t -d postgres -c "SELECT rolcreatedb OR rolsuper FROM pg_roles WHERE rolname = current_user" 2>&1)
