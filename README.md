@@ -67,7 +67,7 @@ You need PostgreSQL 17 (server and client tools), with the `hstore` extension
 
 With [mise](https://mise.jdx.dev) and Docker, `mise install` installs the tools
 in `mise.toml` and `docker compose up --detach --wait` starts the server in
-`compose.yml`; connect to it with `PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres`.
+`compose.yml`; inside the checkout, mise points libpq at that server.
 
 ```sh
 bin/update

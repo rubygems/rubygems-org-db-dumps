@@ -3,3 +3,8 @@
 [tools]
 postgres = "17"
 python = "3"
+
+[env]
+PGHOST = "{{ get_env(name='PGHOST', default='localhost') }}"
+PGUSER = "{{ get_env(name='PGUSER', default='postgres') }}"
+PGPASSWORD = "{{ get_env(name='PGPASSWORD', default='postgres') }}"
