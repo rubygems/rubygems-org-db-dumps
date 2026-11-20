@@ -1,0 +1,5 @@
+# Tools that test/run and bin/update need. `postgres` provides the client
+# (psql, pg_restore, createdb, dropdb); the server runs from compose.yml.
+[tools]
+postgres = "17"
+python = "3"

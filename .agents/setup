@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
+
+# Assumes Docker is running and the tools in mise.toml are installed.
+# Trust mise.toml so mise uses its tools in this checkout.
+mise trust --quiet mise.toml
+
+echo "Starting the services in compose.yml"
+.agents/resume
+echo "Setup finished in ${SECONDS}s"

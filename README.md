@@ -65,6 +65,10 @@ You need PostgreSQL 17 (server and client tools), with the `hstore` extension
 `curl`, and Python 3. Point the usual libpq environment variables (`PGHOST`,
 `PGUSER`, `PGPASSWORD`, ...) at a server where your user can create databases.
 
+With [mise](https://mise.jdx.dev) and Docker, `mise install` installs the tools
+in `mise.toml` and `docker compose up --detach --wait` starts the server in
+`compose.yml`; connect to it with `PGHOST=localhost PGUSER=postgres PGPASSWORD=postgres`.
+
 ```sh
 bin/update
 ```

@@ -1,0 +1,13 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 127.0.0.1:5432:5432
+    restart: unless-stopped
+    healthcheck:
+      test: pg_isready -h localhost -U postgres
+      interval: 5s
+      timeout: 5s
+      retries: 20
