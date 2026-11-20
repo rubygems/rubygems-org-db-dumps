@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""Compare an exported tables/ folder byte for byte with segiddins/rubygems-org-db-dumps.
+
+Usage: scripts/upstream-diff TABLES_DIR DUMP_KEY_OR_DATE
+
+DUMP_KEY_OR_DATE is a DUMP key such as
+production/public_postgresql/2026.10.19.21.21.38/public_postgresql.tar, or just
+its date part (2026.10.19.21.21.38). The upstream commit to compare with is the
+one titled "Update tables for <date>".
+
+Downloads nothing large: it compares the git blob hash of every local file with
+the upstream tree from the GitHub API. For the first few files that differ, it
+downloads the upstream file and prints where the bytes first differ.
+Set GITHUB_TOKEN to avoid the API's anonymous rate limit. Exits 1 on any difference.
+"""
+import hashlib
+import json
+import os
+import sys
+import urllib.request
+
+REPO = "segiddins/rubygems-org-db-dumps"
+SHOW_DIFFS = 3
+
+
+def get(url):
+    request = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json"})
+    if token := os.environ.get("GITHUB_TOKEN"):
+        request.add_header("Authorization", f"Bearer {token}")
+    with urllib.request.urlopen(request, timeout=120) as response:
+        return response.read()
+
+
+def upstream_commit(date):
+    title = f"Update tables for {date}"
+    for page in range(1, 6):
+        commits = json.loads(get(f"https://api.github.com/repos/{REPO}/commits?per_page=100&page={page}"))
+        for commit in commits:
+            if commit["commit"]["message"].split("\n")[0] == title:
+                return commit["sha"]
+        if len(commits) < 100:
+            break
+    sys.exit(f"No upstream commit titled {title!r}; upstream did not export that dump.")
+
+
+def blob_sha(path):
+    with open(path, "rb") as f:
+        data = f.read()
+    return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()
+
+
+def first_difference(local_path, upstream_url):
+    with open(local_path, "rb") as f:
+        mine = f.read()
+    theirs = get(upstream_url)
+    n = next((i for i, (a, b) in enumerate(zip(mine, theirs)) if a != b), min(len(mine), len(theirs)))
+    line = mine.count(b"\n", 0, n) + 1
+    start = max(0, mine.rfind(b"\n", 0, n) + 1)
+    return (f"  sizes local {len(mine)} upstream {len(theirs)}; first difference at byte {n}, line {line}\n"
+            f"  local:    {mine[start:start + 200]!r}\n"
+            f"  upstream: {theirs[start:start + 200]!r}")
+
+
+def main():
+    if len(sys.argv) != 3:
+        sys.exit(__doc__)
+    tables_dir, dump = sys.argv[1], sys.argv[2]
+    date = dump.split("/")[2] if "/" in dump else dump
+    sha = upstream_commit(date)
+    tree = json.loads(get(f"https://api.github.com/repos/{REPO}/git/trees/{sha}?recursive=1"))
+    if tree.get("truncated"):
+        sys.exit("The upstream tree listing is truncated; compare a sparse checkout instead.")
+    upstream = {entry["path"][len("tables/"):]: entry["sha"] for entry in tree["tree"]
+                if entry["type"] == "blob" and entry["path"].startswith("tables/")}
+    local = {}
+    for folder, _, files in os.walk(tables_dir):
+        for name in files:
+            path = os.path.join(folder, name)
+            local[os.path.relpath(path, tables_dir)] = path
+
+    same = sorted(p for p in local if upstream.get(p) == blob_sha(local[p]))
+    differ = sorted(p for p in local if p in upstream and p not in same)
+    only_local = sorted(set(local) - set(upstream))
+    only_upstream = sorted(set(upstream) - set(local))
+
+    print(f"upstream {REPO}@{sha[:12]} ({date})")
+    print(f"identical: {len(same)} of {len(upstream)} upstream files")
+    for label, paths in (("differ", differ), ("only local", only_local), ("only upstream", only_upstream)):
+        for path in paths:
+            print(f"{label}: {path}")
+    for path in differ[:SHOW_DIFFS]:
+        print(f"{path}:")
+        print(first_difference(local[path], f"https://raw.githubusercontent.com/{REPO}/{sha}/tables/{path}"))
+    if differ or only_local or only_upstream:
+        sys.exit(1)
+    print("tables match upstream byte for byte")
+
+
+if __name__ == "__main__":
+    main()

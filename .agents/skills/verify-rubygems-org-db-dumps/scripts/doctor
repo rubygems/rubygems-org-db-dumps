@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# Read-only check of the verification environment. Run it after
+# `eval "$(scripts/pg up)"`, and whenever something looks off.
+# Prints one line per check; exits 1 if a required check fails.
+set -uo pipefail
+
+root=${VERIFY_ROOT:-/tmp/verify-rubygems-org-db-dumps}
+repo=$(git -C "$(dirname "$0")" rev-parse --show-toplevel 2>/dev/null)
+failed=0
+ok() { echo "ok    $*"; }
+bad() { echo "FAIL  $*"; failed=1; }
+info() { echo "info  $*"; }
+
+[[ -n $repo && -x $repo/bin/export ]] && ok "repo $repo at $(git -C "$repo" rev-parse --short HEAD)" \
+  || bad "not inside the rubygems-org-db-dumps checkout"
+
+for tool in psql createdb dropdb curl python3 tar gunzip; do
+  command -v $tool > /dev/null && ok "$tool: $(command -v $tool)" || bad "$tool not on PATH"
+done
+client=$(psql --version 2>/dev/null)
+[[ $client == *" 17."* ]] && ok "client: $client" || bad "client is not PostgreSQL 17: ${client:-none}"
+python3 -c 'import sys; sys.exit(sys.version_info < (3, 8))' 2>/dev/null \
+  && ok "python3 >= 3.8 (bin/check-format uses :=)" || bad "python3 is older than 3.8"
+
+if [[ ${PGHOST:-} == "$root/pg" ]]; then
+  ok "PGHOST is the scratch server ($PGHOST)"
+else
+  bad "PGHOST=${PGHOST:-unset} is not the scratch server; run: eval \"\$(scripts/pg up)\""
+fi
+server=$(psql -X -A -t -d postgres -c "SHOW server_version" 2>&1)
+[[ $server == 17.* ]] && ok "server answers: PostgreSQL $server" || bad "server: $server"
+hstore=$(psql -X -A -t -d postgres -c "SELECT 1 FROM pg_available_extensions WHERE name = 'hstore'" 2>&1)
+[[ $hstore == 1 ]] && ok "hstore extension available" || bad "hstore extension not available"
+createdb_ok=$(psql -X -A -t -d postgres -c "SELECT rolcreatedb OR rolsuper FROM pg_roles WHERE rolname = current_user" 2>&1)
+[[ $createdb_ok == t ]] && ok "role can create databases" || bad "role cannot create databases"
+
+free_gb=$(df -Pk "${TMPDIR:-/tmp}" | awk 'NR == 2 { print int($4 / 1048576) }')
+(( free_gb >= 10 )) && ok "${free_gb} GB free in ${TMPDIR:-/tmp}" \
+  || info "only ${free_gb} GB free in ${TMPDIR:-/tmp}; bin/update needs about 10 GB (test/run does not)"
+
+if curl --fail --silent --max-time 10 -o /dev/null \
+  "https://s3-us-west-2.amazonaws.com/rubygems-dumps/?prefix=production/public_postgresql/"; then
+  ok "dump bucket reachable"
+else
+  info "dump bucket unreachable; only the fixture and format journeys will work"
+fi
+
+info "evidence goes to $root/evidence"
+exit $failed

@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+"""Prove bin/check-format still catches format breaks.
+
+Usage: scripts/format-controls
+
+Copies test/expected once per control, breaks one rule of FORMAT.md in the copy,
+runs bin/check-format on it, and requires exit status 1 with the expected
+message. The unbroken copy must pass. Prints one line per control and exits 1
+if any control is not caught. Needs no database.
+"""
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+
+REPO = subprocess.run(["git", "-C", os.path.dirname(os.path.abspath(__file__)), "rev-parse", "--show-toplevel"],
+                      capture_output=True, text=True, check=True).stdout.strip()
+ROOT = os.environ.get("VERIFY_ROOT", "/tmp/verify-rubygems-org-db-dumps")
+
+
+def edit(path, change):
+    with open(path, "rb") as f:
+        data = f.read()
+    new = change(data)
+    assert new != data, f"control did not change {path}"
+    with open(path, "wb") as f:
+        f.write(new)
+
+
+def sub(pattern, replacement):
+    return lambda data: re.sub(pattern, replacement, data, count=1)
+
+
+def swap_first_rows(data):
+    lines = data.split(b"\n")
+    lines[1], lines[2] = lines[2], lines[1]
+    return b"\n".join(lines)
+
+
+R = "rubygems/part_0.csv"
+CONTROLS = [
+    # name, file under the copy (or None), change, expected message
+    ("unchanged copy passes", None, None, None),
+    # check-format returns the header problem alone, so the BOM shows up as a bad header.
+    ("byte order mark", R, lambda d: b"\xef\xbb\xbf" + d, "header is not"),
+    ("CRLF row ending", R, lambda d: d[:-1] + b"\r\n", "malformed field"),
+    ("no final line feed", R, lambda d: d[:-1], "does not end with a line feed"),
+    ("header renamed", R, sub(rb"^id,name", b"id,gem_name"), "header is not"),
+    ("column dropped", R, sub(rb",t,\n", b",t\n"), "fields, expected"),
+    ("ISO 'T' timestamp", R, sub(rb"(\d{4}-\d\d-\d\d) (\d\d:)", rb"\1T\2"), "is not a valid timestamp"),
+    ("trailing zero in fraction", R, sub(rb"(:\d\d\.\d*[1-9]),", rb"\g<1>0,"), "is not a valid timestamp"),
+    ("boolean as true", R, sub(rb",t,", b",true,"), "is not a valid boolean"),
+    ("needless quotes", R, sub(rb"\n1,zyps,", b'\n1,"zyps",'), "is quoted"),
+    ("comma left unquoted", "versions/part_1.csv", sub(rb'"A, B and ""C"""', b"A; B, C"), "fields, expected"),
+    ("integer with leading zero", "gem_downloads/part_0.csv", sub(rb"\n1,1,", b"\n1,01,"), "is not a valid integer"),
+    ("rows out of order", R, swap_first_rows, "is not after the previous id"),
+    ("part renumbered", "versions/part_1.csv", "rename:part_2.csv", "belongs in part_"),
+    ("zero-padded part name", R, "rename:part_00.csv", "not named part_N.csv"),
+    ("header-only part", R, lambda d: d[:d.index(b"\n") + 1], "has no rows"),
+    ("stray folder", None, "mkdir:extra", "not a table in FORMAT.md"),
+    ("table missing", None, "rmtree:linksets", "missing"),
+]
+
+
+def main():
+    os.makedirs(os.path.join(ROOT, "run"), exist_ok=True)
+    failed = 0
+    for name, target, change, expected in CONTROLS:
+        work = tempfile.mkdtemp(prefix="format-control-", dir=os.path.join(ROOT, "run"))
+        tables = os.path.join(work, "tables")
+        shutil.copytree(os.path.join(REPO, "test", "expected"), tables)
+        if callable(change):
+            edit(os.path.join(tables, target), change)
+        elif change and change.startswith("rename:"):
+            os.rename(os.path.join(tables, target), os.path.join(tables, os.path.dirname(target), change[7:]))
+        elif change and change.startswith("mkdir:"):
+            os.mkdir(os.path.join(tables, change[6:]))
+        elif change and change.startswith("rmtree:"):
+            shutil.rmtree(os.path.join(tables, change[7:]))
+        result = subprocess.run([os.path.join(REPO, "bin", "check-format"), tables], capture_output=True, text=True)
+        output = result.stdout + result.stderr
+        if expected is None:
+            caught = result.returncode == 0
+        else:
+            caught = result.returncode == 1 and expected in output
+        shown = next((line for line in output.splitlines() if expected and expected in line), output.splitlines()[0])
+        print(f"{'ok  ' if caught else 'MISS'}  {name}: {shown.replace(tables + '/', '')}")
+        failed += not caught
+        shutil.rmtree(work)
+    if failed:
+        print(f"{failed} controls not caught", file=sys.stderr)
+        sys.exit(1)
+    print(f"all {len(CONTROLS)} controls behaved as expected")
+
+
+if __name__ == "__main__":
+    main()

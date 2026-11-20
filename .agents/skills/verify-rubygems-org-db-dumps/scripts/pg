@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+# A throwaway PostgreSQL 17 server for verification, reachable only through a
+# Unix socket under $VERIFY_ROOT, so it never touches another server.
+#
+# Usage:
+#   eval "$(scripts/pg up)"   start it (creating it if needed) and print its env
+#   scripts/pg env            print the env of a server already up
+#   scripts/pg down           stop it and delete its data and scratch runs; keep evidence/
+set -euo pipefail
+
+root=${VERIFY_ROOT:-/tmp/verify-rubygems-org-db-dumps}
+dir=$root/pg
+port=54329
+
+find_bin() {
+  local candidate
+  for candidate in "${PGBIN:-}" /usr/lib/postgresql/17/bin /opt/homebrew/opt/postgresql@17/bin \
+    /usr/local/opt/postgresql@17/bin "$(dirname "$(command -v initdb 2>/dev/null || echo /nonexistent/x)")"; do
+    if [[ -n $candidate && -x $candidate/initdb && $("$candidate/initdb" --version) == *" 17."* ]]; then
+      echo "$candidate"
+      return
+    fi
+  done
+  echo "PostgreSQL 17 not found. Install it (Debian/Ubuntu: apt-get install postgresql-17;" \
+    "macOS: brew install postgresql@17) or set PGBIN to its bin directory." >&2
+  exit 1
+}
+
+print_env() {
+  cat <<EOF
+export VERIFY_ROOT='$root'
+export PATH='$(cat "$dir/bindir")':"\$PATH"
+export PGHOST='$dir' PGPORT=$port PGUSER=postgres
+unset PGPASSWORD PGDATABASE PGSERVICE PGSERVICEFILE PGPASSFILE PGOPTIONS
+EOF
+}
+
+case ${1:-} in
+  up)
+    bin=$(find_bin)
+    mkdir -p "$root/evidence"
+    if [[ ! -d $dir/data ]]; then
+      mkdir -p "$dir"
+      "$bin/initdb" -D "$dir/data" -U postgres --auth=trust -E UTF8 --locale=C > "$dir/initdb.log"
+    fi
+    echo "$bin" > "$dir/bindir"
+    if ! "$bin/pg_ctl" -D "$dir/data" status > /dev/null 2>&1; then
+      "$bin/pg_ctl" -D "$dir/data" -l "$dir/server.log" -w \
+        -o "-k '$dir' -c listen_addresses='' -p $port" start > /dev/null
+    fi
+    # Ready means a query runs and hstore (needed by the dump) can be created.
+    "$bin/psql" -h "$dir" -p $port -U postgres -d postgres -X -q -A -t -v ON_ERROR_STOP=1 \
+      -c "SELECT 1 FROM pg_available_extensions WHERE name = 'hstore'" | grep -qx 1 \
+      || { echo "hstore is not available in $bin" >&2; exit 1; }
+    print_env
+    ;;
+  env)
+    [[ -f $dir/bindir ]] || { echo "No server under $dir; run: eval \"\$(scripts/pg up)\"" >&2; exit 1; }
+    print_env
+    ;;
+  down)
+    if [[ -f $dir/bindir && -d $dir/data ]]; then
+      "$(cat "$dir/bindir")/pg_ctl" -D "$dir/data" -m fast stop > /dev/null 2>&1 || true
+    fi
+    rm -rf "$dir" "$root/run"
+    echo "Stopped and removed $dir and $root/run; evidence kept in $root/evidence"
+    ;;
+  *)
+    sed -n '2,9p' "$0" >&2
+    exit 2
+    ;;
+esac
