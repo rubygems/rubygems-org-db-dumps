@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 # Assumes Docker is running and the tools in mise.toml are installed.
-# Trust mise.toml so mise uses its tools in this checkout.
+# Trust mise.toml so mise uses its tools and [env], which points libpq at compose.yml.
 mise trust --quiet mise.toml
 
 echo "Starting the services in compose.yml"
