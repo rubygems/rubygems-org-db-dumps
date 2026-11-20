@@ -9,7 +9,7 @@ jobs:
   format:
     runs-on: ubuntu-latest
     services:
-      # The runner's psql client talks to this server over port 5432.
+      # psql from mise.toml talks to this server over port 5432.
       postgres:
         image: postgres:18
         env:
@@ -29,6 +29,8 @@ jobs:
       PGPASSWORD: postgres
     steps:
       - uses: actions/checkout@v4
+      # Installs the PostgreSQL client and Python that mise.toml pins.
+      - uses: jdx/mise-action@v5
       - name: Export the fixture and compare it with test/expected
         run: test/run
       - name: Check tables/ against FORMAT.md
