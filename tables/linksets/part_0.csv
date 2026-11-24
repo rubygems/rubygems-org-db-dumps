@@ -11441,7 +11441,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 26548,27742,http://nonsequitur.github.com/rum,"",http://nonsequitur.github.com/rum/,"",https://github.com/nonsequitur/rum,"",2010-03-25 20:54:03.346589,2012-11-25 16:22:16.403066
 26549,27743,http://github.com/govan/pollock,,,,,,2010-03-25 20:54:49.918903,2010-03-25 20:54:49.920373
 26550,27744,http://github.com/pjaspers/capfire,,,,,,2010-03-25 21:40:19.847407,2011-03-05 14:42:38.236004
-26551,27745,http://github.com/mogest/prawn-svg,http://wiki.github.com/mogest/prawn-svg/,http://rdoc.info/projects/mogest/prawn-svg,"",http://github.com/mogest/prawn-svg,http://github.com/mogest/prawn-svg/issues,2010-03-26 00:16:32.36258,2010-03-30 23:08:11.687692
+26551,27745,https://github.com/mogest/prawn-svg,http://wiki.github.com/mogest/prawn-svg/,http://rdoc.info/projects/mogest/prawn-svg,"",http://github.com/mogest/prawn-svg,http://github.com/mogest/prawn-svg/issues,2010-03-26 00:16:32.36258,2026-11-20 04:31:59.011624
 26552,27746,http://github.com/superfeedr/em-redis,,,,,,2010-03-26 01:43:55.728127,2011-02-23 16:28:09.911232
 26553,27747,http://github.com/leejones/trash,,,,,,2010-03-26 02:00:40.628109,2010-03-26 02:00:40.629684
 26554,27748,http://github.com/richdownie/watircuke,http://gallery.me.com/rudyonrails#100126,"","","","",2010-03-26 02:24:44.110003,2010-10-25 17:12:34.954883
@@ -22375,7 +22375,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 37769,39303,http://github.com/rgeyer/shp2db,,,,,,2011-03-15 01:11:27.181644,2011-03-15 01:11:27.186678
 37770,39304,http://github.com/mechaferret/resque-pubsub,,,,,,2011-03-15 01:35:02.342439,2011-03-15 01:35:02.347503
 37771,39305,http://mikbe.tk,,,,,,2011-03-15 02:06:31.597377,2011-03-15 02:06:31.602712
-37772,39306,http://github.com/chrislee35/dnsbl-client,,,,,,2011-03-15 02:10:01.490418,2011-03-15 02:10:01.495357
+37772,39306,https://github.com/chrislee35/dnsbl-client,,,,,,2011-03-15 02:10:01.490418,2026-11-23 06:18:47.232469
 37773,39307,http://github.com/presidentbeef/the_little_streamer,"","","",https://github.com/presidentbeef/the_little_streamer,https://github.com/presidentbeef/the_little_streamer/issues,2011-03-15 02:15:06.931481,2012-01-01 04:05:54.097068
 37774,39308,http://github.com/andeemarks/bleeding_edge,,,,,,2011-03-15 05:56:07.911756,2011-03-15 05:56:07.918335
 37775,39309,http://rubygems.org/gems/easy-automation,,,,,,2011-03-15 05:57:16.964166,2011-03-15 05:57:16.969092
@@ -24320,7 +24320,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 39756,41336,https://github.com/pigoz/tankobon,,,,,,2011-05-07 12:38:24.995978,2011-05-07 12:38:25.001133
 39757,41337,http://github.com/jjuarez/ldap-shell-utils,,,,,,2011-05-07 15:12:23.270748,2011-05-07 15:12:23.275661
 39758,41339,http://github.com/pdodds/q-ruby-driver,,,,,,2011-05-07 15:33:14.406179,2011-05-07 15:33:14.410834
-39759,41340,http://rubyworks.github.com/assay,,,,,,2011-05-07 16:50:11.901651,2012-01-27 20:24:43.472229
+39759,41340,https://github.com/rubyworks/assay,,,,,,2011-05-07 16:50:11.901651,2026-11-23 06:58:52.758365
 39760,41341,https://github.com/nashby/wtf_lang,,,,,,2011-05-07 17:10:09.996478,2012-03-03 21:31:40.568699
 39761,41342,http://github.com/cldwalker/ripl-i18n,,,,,,2011-05-07 17:41:47.811253,2011-05-07 17:41:47.816213
 39762,41343,https://github.com/chrislee35/arbor-atlas,,,,,,2011-05-07 18:33:53.282621,2013-06-05 13:33:47.426157
@@ -24894,7 +24894,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 40335,41931,https://github.com/alexmchale/remove_white_border,,,,,,2011-05-21 18:36:39.022546,2011-05-21 18:36:39.028005
 40336,41932,https://github.com/sauliusg/has_token_on,,,,,,2011-05-21 19:28:09.286743,2011-05-21 19:28:09.291569
 40337,41933,"",,,,,,2011-05-21 19:49:16.102071,2011-05-21 19:49:16.107192
-40338,41934,http://rubyworks.github.com/tapout,"","",http://groups.google.com/group/rubyworks-mailinglist,http://github.com/rubyworks/tapout,http://github.com/rubyworks/tapout/issues,2011-05-21 20:23:28.843661,2011-05-21 20:28:13.028413
+40338,41934,https://rubyworks.github.io/tapout,"","",http://groups.google.com/group/rubyworks-mailinglist,http://github.com/rubyworks/tapout,http://github.com/rubyworks/tapout/issues,2011-05-21 20:23:28.843661,2026-11-21 19:33:08.610085
 40339,41935,https://github.com/thisduck/ruby-less-js,,,,,,2011-05-21 20:35:03.84793,2011-05-21 20:35:03.852919
 40340,41936,http://levinalex.net/src/xdt,,,,,,2011-05-21 21:06:39.329592,2011-05-21 21:06:39.33434
 40341,41937,http://github.com/timonk/fixed_width,,,,,,2011-05-21 21:13:57.162147,2011-05-21 21:13:57.167155
@@ -30063,7 +30063,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 45573,47309,http://projectblacklight.org/,,,,,,2011-10-06 17:58:45.351564,2011-10-06 17:58:45.357126
 45574,47310,https://github.com/hojberg/guard-yeti,,,,,,2011-10-06 17:59:35.631259,2011-10-06 17:59:35.637545
 45575,47311,https://github.com/hughbien/mdprev,,,,,,2011-10-06 18:38:45.941885,2011-10-06 18:38:45.94823
-45576,47312,http://rubyworks.github.com/minitap,"",http://rubydoc.info/gems/minitap,http://groups.google.com/group/rubyworks-mailinglist,http://github.com/rubyworks/minitap,http://github.com/rubyworks/minitap/issues,2011-10-06 18:52:08.522458,2012-05-02 14:56:31.234239
+45576,47312,https://github.com/rubyworks/minitap,"",http://rubydoc.info/gems/minitap,http://groups.google.com/group/rubyworks-mailinglist,http://github.com/rubyworks/minitap,http://github.com/rubyworks/minitap/issues,2011-10-06 18:52:08.522458,2026-11-22 03:51:07.431823
 45577,47313,http://zephirworks.com/,,,,,,2011-10-06 19:12:41.569215,2011-10-06 19:12:41.574586
 45578,47314,http://github.com/timols/fourmer,,,,,,2011-10-06 20:07:16.465074,2011-10-06 20:07:16.470005
 45579,47315,http://zephirworks.com/,,,,,,2011-10-06 20:42:02.732566,2011-10-06 20:42:02.737646
@@ -32808,7 +32808,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 48336,51121,https://github.com/mitijain123/resources_controller,,,,,,2011-12-14 12:41:06.893978,2011-12-14 12:51:13.933747
 48337,51122,http://github.com/andreasronge/neo4j-admin/tree,,,,,,2011-12-14 13:12:45.689277,2011-12-14 13:12:45.6935
 48338,51123,"",,,,,,2011-12-14 13:54:34.887639,2011-12-14 13:54:34.892374
-48339,51124,http://rubyworks.github.com/rspec-ontap,,,,,,2011-12-14 15:09:08.987756,2011-12-14 15:09:08.992026
+48339,51124,https://github.com/rubyworks/rspec-ontap,,,,,,2011-12-14 15:09:08.987756,2026-11-22 07:40:06.903851
 48340,51125,http://github.com/codegram/autility,,,,,,2011-12-14 15:11:23.911633,2011-12-14 15:15:52.10251
 48341,51126,http://github.com/LifebookerInc/sailthru_mailer,,,,,,2011-12-14 16:10:31.993615,2013-05-23 01:53:24.283541
 48342,51127,"",,,,,,2011-12-14 16:15:08.71004,2014-02-19 22:50:12.388237
@@ -37121,7 +37121,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 52708,55570,"",,,,,,2012-03-18 05:45:57.663159,2012-03-18 05:45:57.667638
 52709,55571,http://github.com/rcode5/qr4r,,,,,,2012-03-18 05:57:00.680696,2012-11-29 07:07:44.410093
 52710,55572,"",,,,,,2012-03-18 06:05:09.517661,2012-03-18 06:05:09.522352
-52711,55573,"",https://github.com/rmoriz/mvg-live/wiki,http://rmoriz.github.com/mvg-live/,"",https://github.com/rmoriz/mvg-live,https://github.com/rmoriz/mvg-live/issues,2012-03-18 06:09:38.282342,2012-04-03 07:03:53.595728
+52711,55573,https://github.com/rmoriz/mvg-live,https://github.com/rmoriz/mvg-live/wiki,http://rmoriz.github.com/mvg-live/,"",https://github.com/rmoriz/mvg-live,https://github.com/rmoriz/mvg-live/issues,2012-03-18 06:09:38.282342,2026-11-23 04:34:09.014459
 52712,55574,http://rubygems.org/gems/cascading-configuration-ancestors,,,,,,2012-03-18 06:19:07.857961,2012-03-18 06:19:07.86239
 52713,55575,http://rubygems.org/gems/cascading-configuration-inheritance,,,,,,2012-03-18 06:19:10.849011,2012-03-18 06:19:10.850247
 52714,55576,http://rubygems.org/gems/cascading-configuration-methods,,,,,,2012-03-18 06:19:13.708855,2012-03-18 07:48:41.183767
@@ -37473,7 +37473,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 53063,55926,http://github.com/utahta/jpstock,,,,,,2012-03-24 17:00:12.114199,2012-03-24 17:00:12.120319
 53064,55927,http://github.com/ashbb/purple_shoes,,,,,,2012-03-24 17:42:57.97268,2012-03-24 17:42:57.977167
 53065,55928,https://github.com/jamesjn/yahoo_nba,,,,,,2012-03-24 17:44:32.072163,2012-04-07 18:12:46.866437
-53066,55929,http://github.com/kslazarev/numbers_and_words,,,,,,2012-03-24 17:56:04.952415,2012-03-24 17:56:04.95737
+53066,55929,https://github.com/kslazarev/numbers_and_words,,,,,,2012-03-24 17:56:04.952415,2026-11-22 13:36:11.663394
 53067,55930,http://github.com/GerryG/namelogic/,"","","",https://github.com/wagn/smartname,"",2012-03-24 18:14:28.877522,2012-11-21 02:02:54.3918
 53068,55931,http://bikeonastick.blogspot.com/p/open-source-projects.html#carboy,,,,,,2012-03-24 19:30:33.945356,2012-03-24 19:30:33.94978
 53069,55932,http://github.com/nicck/omniauth-rtm,"","","",http://github.com/nicck/omniauth-rtm,http://github.com/nicck/omniauth-rtm/issues,2012-03-24 20:22:22.212616,2012-03-24 20:26:53.577603
@@ -42772,7 +42772,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 58423,61337,http://github.com/johnbintz/rack-emstream/,,,,,,2012-07-09 20:59:55.521901,2012-07-09 20:59:55.524574
 58424,61338,https://github.com/jasonmk/datastax_rails,,,,,,2012-07-09 21:36:22.400644,2012-07-09 21:36:22.403381
 58425,61339,https://github.com/mudge/if,,,,,,2012-07-09 21:44:36.783473,2015-03-15 11:55:56.865972
-58426,61340,https://www.are.na/,,,,,,2012-07-09 22:25:12.658606,2018-06-03 16:25:51.473861
+58426,61340,https://github.com/aredotna/arena-rb,,,,,,2012-07-09 22:25:12.658606,2026-11-20 21:16:10.952606
 58427,61341,http://www.cloudfoundry.org,,,,,,2012-07-09 22:42:57.428441,2012-07-09 22:42:57.429812
 58428,61342,http://hammackj.github.io/kekkan,"","","",http://github.com/arxopia/kekkan,http://github.com/arxopia/kekkan/issues,2012-07-09 22:44:28.620943,2017-02-12 02:09:45.459039
 58429,61343,http://github.com/thiagofm/buscape_api,,,,,,2012-07-09 23:03:23.358552,2012-07-09 23:03:23.360861
@@ -49933,7 +49933,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 65666,68610,http://github.com/dd9/eric,,,,,,2012-12-06 14:54:30.45831,2012-12-06 14:54:30.461209
 65667,68611,,,,,,,2012-12-06 16:04:15.128321,2012-12-06 16:04:15.128321
 65668,68612,http://github.com/songkick/aspec,,,,,,2012-12-06 16:09:33.201813,2012-12-06 16:09:33.204947
-65669,68613,http://www.ui-alchemy.org,,,,,,2012-12-06 16:16:32.153615,2013-01-17 14:17:56.01472
+65669,68613,https://www.alchemy-cms.com,,,,,,2012-12-06 16:16:32.153615,2026-11-20 20:04:36.848107
 65670,68614,https://github.com/cgunther/quickbooks_web_connector,,,,,,2012-12-06 16:37:41.187911,2012-12-06 16:37:41.191509
 65671,68615,http://github.com/bitflingr/netscaler,"",http://rubydoc.info/gems/netscaler/frames,"",http://github.com/bitflingr/netscaler,"",2012-12-06 16:41:44.328186,2018-01-09 22:33:22.077214
 65672,68616,"",,,,,,2012-12-06 16:41:51.103161,2012-12-06 16:41:51.104513
@@ -53692,7 +53692,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 69497,72461,https://github.com/dsisnero/hash_maps.git,,,,,,2013-02-18 17:25:38.155921,2013-02-18 17:25:38.158424
 69498,72462,https://github.com/DiegoSalazar/BinaryHarlemShake,,,,,,2013-02-18 17:39:26.163011,2013-02-18 17:39:26.165145
 69499,72463,https://github.com/zduci/robin,,,,,,2013-02-18 18:06:39.764828,2013-02-18 18:06:39.767208
-69500,72464,https://github.com/zduci/robin,,,,,,2013-02-18 18:22:28.764727,2013-02-18 18:22:28.766967
+69500,72464,https://github.com/sferik/robin,,,,,,2013-02-18 18:22:28.764727,2026-11-20 23:08:19.442052
 69501,72465,http://github.com/jayniz/rspec-api-test,,,,,,2013-02-18 18:36:08.678751,2013-02-18 18:36:08.681231
 69502,72466,http://github.com/sosedoff/arrow_payments,,,,,,2013-02-18 19:28:48.601859,2013-02-18 19:28:48.60407
 69503,72467,https://github.com/bambooengineering/session-check,,,,,,2013-02-18 19:30:22.355912,2023-01-19 14:13:24.796848
@@ -56495,7 +56495,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 72338,75308,https://github.com/flexminder/monark,"","","",http://github.com/flexminder/monark,http://github.com/flexminder/monark/issues,2013-04-05 15:57:51.593146,2013-04-05 16:00:24.863828
 72339,75309,http://github.com/kevinrutherford/dag,,,,,,2013-04-05 16:03:40.703096,2013-04-05 16:03:40.705389
 72340,75310,https://github.com/gkato/hyperfeed,,,,,,2013-04-05 16:05:43.162973,2013-05-13 18:02:29.324785
-72341,75311,http://github.com/pboling/gem_bench,,,,,,2013-04-05 16:07:43.404282,2023-09-25 21:30:54.093092
+72341,75311,https://github.com/galtzo-floss/gem_bench,,,,,,2013-04-05 16:07:43.404282,2026-11-18 00:40:13.50132
 72342,75312,,,,,,,2013-04-05 16:09:28.793192,2014-02-13 12:14:49.695173
 72343,75313,,,,,,,2013-04-05 16:32:11.97833,2013-04-05 16:32:11.97833
 72344,75314,https://github.com/metamorfos/postrocktues,"","","",https://github.com/metamorfos/postrocktues,"",2013-04-05 16:34:05.24074,2013-04-05 16:51:28.837958
@@ -78677,7 +78677,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 94763,97882,https://github.com/anshulm/no_nonsense_currency_converter,https://github.com/anshulm/no_nonsense_currency_converter,https://github.com/anshulm/no_nonsense_currency_converter,"",https://github.com/anshulm/no_nonsense_currency_converter,https://github.com/anshulm/no_nonsense_currency_converter/issues,2014-05-03 10:39:04.128868,2014-05-03 11:19:00.276342
 94764,97883,https://github.com/pat/sliver,,,,,,2014-05-03 11:54:52.790048,2014-05-03 11:54:52.79244
 94765,97884,https://github.com/harshalbhakta/jquery-file-upload-railed,,,,,,2014-05-03 11:55:25.640412,2014-05-03 11:55:25.64269
-94766,97885,https://github.com/seuros/state_machines-yard,,,,,,2014-05-03 12:35:01.181474,2014-05-03 12:35:01.184415
+94766,97885,https://github.com/state-machines/state_machines-yard,,,,,,2014-05-03 12:35:01.181474,2026-11-17 15:31:05.25778
 94767,97886,"",,,,,,2014-05-03 13:26:05.70742,2014-05-03 13:26:05.709772
 94768,97887,https://github.com/rubymotion/sweet-kit/README.md,,,,,,2014-05-03 15:07:25.672998,2014-05-03 15:07:25.675199
 94769,97888,http://github.com/tenforwardconsulting/holy_cow,,,,,,2014-05-03 15:09:56.52013,2014-05-03 15:09:56.522947
@@ -80359,7 +80359,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 96457,99578,https://github.com/bencolon/ember-qunit-rails,,,,,,2014-06-03 15:33:40.248095,2014-06-03 15:33:40.250197
 96458,99579,https://github.com/agardiner/csv-diff,,,,,,2014-06-03 15:39:30.092009,2014-06-03 15:39:30.094443
 96459,99580,http://github.com/jwagener/httmultiparty,,,,,,2014-06-03 16:04:56.119926,2014-06-03 16:04:56.12197
-96460,99581,"",,,,,,2014-06-03 16:36:39.481717,2014-06-03 16:36:39.48384
+96460,99581,https://github.com/rmoriz/unspam,,,,,,2014-06-03 16:36:39.481717,2026-11-23 15:35:22.337467
 96461,99582,https://github.com/noam-io/lemma-ruby,,,,,,2014-06-03 16:41:15.690622,2014-06-03 16:41:15.693001
 96462,99583,"",,,,,,2014-06-03 17:27:13.987279,2014-06-03 17:27:13.990056
 96463,99584,"",,,,,,2014-06-03 18:05:02.466134,2014-06-03 18:05:02.468198

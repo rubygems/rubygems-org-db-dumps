@@ -13863,7 +13863,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 114302,117403,https://github.com/e2/nenv,,,,,,2014-12-13 11:21:31.435236,2014-12-13 15:25:16.189964
 114303,117404,https://github.com/AgileConsultingLLC/capistrano3-delayed-job,"",https://github.com/AgileConsultingLLC/capistrano3-delayed-job,"",https://github.com/AgileConsultingLLC/capistrano3-delayed-job,https://github.com/AgileConsultingLLC/capistrano3-delayed-job/issues,2014-12-13 11:22:09.25858,2016-04-28 23:34:18.536477
 114304,117405,https://github.com/feedreader/pluto.tasks,,,,,,2014-12-13 11:24:28.004975,2015-01-01 12:52:32.841583
-114305,117406,http://github.com/faye/permessage-deflate-ruby,,,,,,2014-12-13 12:25:08.891232,2014-12-13 12:25:08.930125
+114305,117406,https://github.com/faye/permessage-deflate-ruby,,,,,,2014-12-13 12:25:08.891232,2026-11-16 23:45:14.127004
 114306,117407,https://github.com/faye/websocket-extensions-ruby,,,,,,2014-12-13 12:25:08.993234,2017-11-11 01:26:42.15992
 114307,117408,https://github.com/5t111111/dir_tree,,,,,,2014-12-13 13:47:37.570944,2014-12-13 13:47:37.572163
 114308,117409,https://github.com/coders51/jazz_hands2,,,,,,2014-12-13 14:30:43.108159,2014-12-13 14:30:43.109373
@@ -18910,7 +18910,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 119432,122534,https://github.com/chancancode/as_json_encoder,,,,,,2015-03-13 08:34:43.926962,2015-03-13 08:34:43.929168
 119433,122535,http://rubygems.org/gems/facebook-integration,,,,,,2015-03-13 08:46:45.176373,2015-03-13 08:46:45.178394
 119434,122536,https://github.com/SPBTV/with_uid,,,,,,2015-03-13 08:55:50.589577,2015-03-13 08:55:50.591712
-119435,122537,http://flori.github.com/memosig,,,,,,2015-03-13 09:20:38.050093,2015-03-13 09:20:38.052252
+119435,122537,https://github.com/flori/memosig,,,,,,2015-03-13 09:20:38.050093,2026-11-20 21:25:35.004601
 119436,122538,http://github.com/pretzelhands/accounts,,,,,,2015-03-13 10:09:13.14239,2015-03-13 10:09:13.144583
 119437,122539,https://github.com/alphagov/govuk-content-schema-test-helpers,,,,,,2015-03-13 10:54:27.501345,2015-03-13 10:54:27.503377
 119438,122540,https://github.com/rynkwn/DateParser,,,,,,2015-03-13 12:53:22.590039,2016-07-27 02:29:17.700057
@@ -38625,7 +38625,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 139857,142998,https://github.com/mrdomino/omniauth-sandstorm,,,,,,2016-03-28 17:15:11.091816,2016-03-28 17:15:11.093218
 139858,142999,http://github.com/jmhmccr/kv_accessor,,,,,,2016-03-28 17:37:50.446535,2016-03-28 17:37:50.448445
 139859,143000,https://github.com/hugocore/play_store_info,,,,,,2016-03-28 17:51:30.573608,2016-03-28 17:51:30.576584
-139860,143001,http://www.railsbling.com/tags/activerecord-transactionable,,,,,,2016-03-28 18:24:35.487789,2016-03-28 18:24:35.489202
+139860,143001,https://github.com/galtzo-floss/activerecord-transactionable,,,,,,2016-03-28 18:24:35.487789,2026-11-18 05:16:04.138416
 139861,143002,https://www.github.com/jensmeder/Phoenx,,,,,,2016-03-28 18:55:19.814309,2016-03-28 18:55:19.815756
 139862,143003,http://github.com/regrapher/regrapher,,,,,,2016-03-28 19:04:46.822125,2016-03-28 19:04:46.823502
 139863,143004,,,,,,,2016-03-28 19:09:36.723666,2016-03-28 19:09:36.723666
@@ -47760,7 +47760,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 149265,152423,https://github.com/dankimio/tinkoff,,,,,,2016-10-29 01:15:49.012041,2016-10-29 01:15:49.013789
 149266,152424,https://github.com/katorres02/w-ruby,,,,,,2016-10-29 01:36:29.245123,2016-10-29 01:36:29.246228
 149267,152425,https://github.com/gangelo/simple_command_dispatcher,,,,,,2016-10-29 02:17:39.498153,2016-10-29 02:17:39.499803
-149268,152426,"",,,,,,2016-10-29 03:24:16.832954,2016-10-29 03:24:16.83483
+149268,152426,https://lwm-luminx.github.io/graph_query/,,,,,,2016-10-29 03:24:16.832954,2026-11-20 00:28:29.744071
 149269,152427,https://github.com/JohnGluszak/,,,,,,2016-10-29 03:51:12.729802,2016-10-29 03:51:12.731473
 149270,152428,https://github.com/raviqqe/map-rec.rb,,,,,,2016-10-29 03:54:24.709031,2016-10-29 03:54:24.710236
 149271,152429,"",,,,,,2016-10-29 08:00:28.119367,2016-10-29 08:00:28.120859
@@ -51985,7 +51985,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 153623,156781,https://github.com/adam12/roda-mailer_ext,,,,,,2017-02-10 01:38:51.752818,2017-02-10 01:38:51.754716
 153624,156782,http://rubygems.org/gems/hdsl,,,,,,2017-02-10 02:09:16.785057,2017-02-10 02:09:16.786839
 153625,156783,https://github.com/adam12/roda-mailer_preview,,,,,,2017-02-10 02:37:12.098722,2017-02-10 02:37:12.099893
-153626,156784,https://github.com/work-design/rails_com,,,,,,2017-02-10 03:17:01.354522,2018-12-17 12:16:19.83393
+153626,156784,https://github.com/one-work/rails_com,,,,,,2017-02-10 03:17:01.354522,2026-11-22 07:14:45.095612
 153627,156785,http://rubygems.org/gems/yolo-msg,,,,,,2017-02-10 03:24:38.533975,2017-02-10 03:24:38.537091
 153628,156786,https://github.com/hsanson/asciidoctor-legal,,,,,,2017-02-10 03:25:36.933488,2017-02-10 03:25:36.935643
 153629,156787,https://github.com/hikouki/fluent-plugin-dio,,,,,,2017-02-10 05:03:53.04149,2017-02-10 05:03:53.04256
@@ -61847,7 +61847,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 163969,167127,"",,,,,,2017-11-14 21:38:22.385095,2017-11-14 21:38:22.386581
 163970,167128,https://github.com/vizor-games/jac,,,,,,2017-11-14 21:45:52.560994,2017-11-14 21:45:52.562489
 163972,167130,https://github.com/victorwu3/grails-mvc,,,,,,2017-11-14 23:08:38.317999,2017-11-15 20:31:38.529201
-163973,167131,https://github.com/boltthreads/activerecord-tablefree,,,,,,2017-11-14 23:38:06.711126,2017-11-14 23:38:06.712296
+163973,167131,https://github.com/galtzo-floss/activerecord-tablefree,,,,,,2017-11-14 23:38:06.711126,2026-11-18 05:14:34.41266
 163974,167132,https://github.com/IPGPTP/printos,,,,,,2017-11-14 23:39:04.529457,2017-11-14 23:39:04.530467
 163975,167133,https://rubygems.org/gems/boppers-coinmarketcap,,,,,,2017-11-14 23:52:16.080834,2017-11-14 23:52:16.08239
 163976,167134,https://github.com/loganb/KDER,,,,,,2017-11-15 03:13:35.992646,2017-11-15 03:13:35.993763
@@ -71333,7 +71333,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 173857,177054,https://github.com/ashmaroli/jekyll-locale,,,,,,2018-09-21 11:43:56.5542,2018-09-21 11:43:56.555806
 173858,177055,https://github.com/cloudaper/pr-merger,,,,,,2018-09-21 12:26:27.621033,2018-09-21 12:26:27.622244
 173859,177056,https://pricalper.com,,,,,,2018-09-21 12:31:25.707861,2018-09-21 12:31:25.709035
-173860,177057,https://gitlab.com/pboling/require_bench,,,,,,2018-09-21 13:34:00.364268,2023-10-10 18:06:52.8973
+173860,177057,https://github.com/galtzo-floss/require_bench,,,,,,2018-09-21 13:34:00.364268,2026-11-18 05:16:01.671603
 173861,177058,https://github.com/jekyll/minima,,,,,,2018-09-21 13:42:46.480799,2018-09-21 13:42:46.48237
 173862,177059,https://github.com/rcpedro/legatus,,,,,,2018-09-21 14:16:52.666077,2018-09-21 14:16:52.667701
 173863,177060,http://github.com/digitpaint/roger_url_relativizer,,,,,,2018-09-21 15:46:24.431166,2018-09-21 15:46:24.43398
@@ -82770,7 +82770,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 185429,188818,https://github.com/r7kamura/hibana,,,,,,2019-12-24 16:47:24.64491,2019-12-24 16:47:24.646469
 185430,188819,https://rubygems.org/gems/quick_note,,,,,,2019-12-24 18:15:14.783176,2019-12-24 18:15:14.784889
 185431,188820,https://github.com/thedrummeraki,,,,,,2019-12-24 18:22:30.327978,2019-12-24 18:22:30.3293
-185432,188821,https://rubygems.org/gems/melipayamak,,,,,,2019-12-24 20:53:47.379384,2019-12-24 20:53:47.380633
+185432,188821,https://github.com/Melipayamak/melipayamak-ruby,,,,,,2019-12-24 20:53:47.379384,2026-11-18 14:09:52.847982
 185433,188822,https://gitlab.com/ghustavus/learnrubygem,,,,,,2019-12-24 21:30:20.642,2019-12-24 21:30:20.643807
 185434,188823,https://github.com/aryaziai/Ruby_Tunes,,,,,,2019-12-25 00:39:04.395922,2019-12-25 00:39:04.397249
 185435,187195,https://github.com/ruby/readline,,,,,,2019-12-25 01:30:53.701091,2019-12-25 01:30:53.702043
@@ -90512,9 +90512,9 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 193193,196670,http://github.com/vmware/fluent-plugin-vmware-log-intelligence,,,,,,2020-11-06 03:39:56.272898,2020-11-06 03:39:56.273789
 193194,196671,https://github.com/interscript/iso-639-data,,,,,,2020-11-06 04:06:13.061491,2020-11-08 01:30:11.970572
 193195,196672,https://gitlab.com/ravngroup/open-source/ruby-zyre,,,,,,2020-11-06 06:35:51.463439,2020-11-06 06:35:51.465111
-193196,196673,https://github.com/getsentry/sentry-ruby/tree/7.2.0/sentry-ruby,,,,,,2020-11-06 10:10:49.282691,2026-10-28 14:55:31.651915
-193197,196674,https://github.com/getsentry/sentry-ruby/tree/7.2.0/sentry-rails,,,,,,2020-11-06 11:01:30.308589,2026-10-28 14:55:31.69663
-193198,196675,https://github.com/getsentry/sentry-ruby/tree/7.2.0/sentry-sidekiq,,,,,,2020-11-06 11:02:33.145217,2026-10-28 14:55:31.588683
+193196,196673,https://github.com/getsentry/sentry-ruby/tree/7.3.0/sentry-ruby,,,,,,2020-11-06 10:10:49.282691,2026-11-18 10:45:26.258549
+193197,196674,https://github.com/getsentry/sentry-ruby/tree/7.3.0/sentry-rails,,,,,,2020-11-06 11:01:30.308589,2026-11-18 10:45:26.248066
+193198,196675,https://github.com/getsentry/sentry-ruby/tree/7.3.0/sentry-sidekiq,,,,,,2020-11-06 11:02:33.145217,2026-11-18 10:45:26.17386
 193199,196677,https://github.com/rjitsu/jekyll-theme-aurora,,,,,,2020-11-06 13:31:13.825884,2020-11-06 13:31:13.827303
 193200,196678,https://www.ledgersync.dev,,,,,,2020-11-06 14:32:55.465255,2020-11-06 14:32:55.467175
 193201,196679,https://www.ledgersync.dev,,,,,,2020-11-06 15:57:46.9252,2020-11-06 15:57:46.926605
@@ -92536,7 +92536,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 195220,198720,https://github.com/NILID/bootstrap_icons_rails,,,,,,2021-02-09 09:45:05.305755,2021-02-09 09:45:05.306768
 195221,198721,https://rexy.tech/,,,,,,2021-02-09 11:05:52.977141,2021-02-09 11:05:52.978962
 195222,198722,https://sustainable-rails.com,,,,,,2021-02-09 13:53:56.590162,2021-02-09 13:53:56.592266
-195223,198723,https://github.com/getsentry/sentry-ruby/tree/7.2.0/sentry-delayed_job,,,,,,2021-02-09 15:00:20.479118,2026-10-28 14:55:31.265641
+195223,198723,https://github.com/getsentry/sentry-ruby/tree/7.3.0/sentry-delayed_job,,,,,,2021-02-09 15:00:20.479118,2026-11-18 10:45:26.219774
 195224,198724,https://github.com/gunnertech/active-elastic-job,,,,,,2021-02-09 17:13:05.931985,2021-02-09 17:13:05.933565
 195225,198725,https://github.com/tabyington/CanvasUserGen,,,,,,2021-02-09 21:03:23.030228,2021-02-09 21:03:23.031746
 195226,198726,https://gitlab.com/gitlab-org/fluent-plugins/fluent-plugin-postgresql-csvlog,,,,,,2021-02-10 00:18:22.977318,2021-06-24 13:48:17.960685
@@ -94180,7 +94180,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 196866,200371,https://ruby-gnome.github.io/,,,,,,2021-04-22 02:18:28.689377,2025-07-14 09:43:13.652941
 196867,200372,https://github.com/BenCreating/palindrome,,,,,,2021-04-22 03:03:15.673582,2021-04-22 03:03:15.675484
 196868,200373,https://github.com/moneybird/active-date-range,,,,,,2021-04-22 08:53:08.70513,2021-04-22 08:53:08.706334
-196869,200374,"",,,,,,2021-04-22 10:50:55.652056,2021-04-22 10:50:55.653219
+196869,200374,https://github.com/64kramsystem/sshkit-sudo-next,,,,,,2021-04-22 10:50:55.652056,2026-11-17 19:42:21.247786
 196870,200375,,,,,,,2021-04-22 11:35:01.151235,2021-04-22 11:35:01.151235
 196871,200376,https://gitlab.com/gitlab-org/gl-security/security-engineering/security-automation/spam/spamcheck,,,,,,2021-04-22 16:44:23.608136,2023-04-07 14:17:37.951801
 196872,200377,https://github.com/sqreen/libv8-node,,,,,,2021-04-22 18:56:15.434215,2021-04-22 18:56:15.43536
@@ -95363,7 +95363,7 @@ id,rubygem_id,home,wiki,docs,mail,code,bugs,created_at,updated_at
 198049,201562,https://rubygems.org/gems/hola,,,,,,2021-06-30 00:05:12.787475,2021-06-30 00:05:12.789333
 198050,201563,http://rubygems.org/gems/wiringpi-ruby,,,,,,2021-06-30 01:17:11.18112,2021-06-30 01:17:11.182995
 198051,201564,https://github.com/YusukeIwaki/capybara-puppeteer-driver,,,,,,2021-06-30 04:36:04.278394,2021-06-30 04:36:04.280246
-198052,201532,https://github.com/getsentry/sentry-ruby/tree/7.2.0/sentry-resque,,,,,,2021-06-30 05:18:11.445821,2026-10-28 14:55:31.439936
+198052,201532,https://github.com/getsentry/sentry-ruby/tree/7.3.0/sentry-resque,,,,,,2021-06-30 05:18:11.445821,2026-11-18 10:45:26.067219
 198053,201565,https://github.com/nosolosoftware/faker_spanish,,,,,,2021-06-30 08:18:22.122517,2021-06-30 08:18:22.123479
 198054,201566,https://rubygems.org/gems/hola,,,,,,2021-06-30 09:00:42.096919,2021-06-30 09:00:42.099098
 198055,201567,,,,,,,2021-06-30 10:50:43.427475,2021-06-30 10:50:43.427475
